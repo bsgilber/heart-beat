@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+logging:
+  level: "debug"
+
+redis:
+  host: "redis://localhost"
+  port: 6300
+  poolSize: 20
