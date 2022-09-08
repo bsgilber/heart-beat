@@ -7,7 +7,9 @@ BINARYNAME=main
 COVERPROFILE=coverage.out
 
 build:
-	$(GOBUILD) -o $(BUILDDIR)/$(BINARYNAME) cmd/api/main.go
+	# DISABLE CGO needed to avoid dynamic linking in the network setup
+	# https://stackoverflow.com/a/36308464
+	CGO_ENABLED=0 $(GOBUILD) -o $(BUILDDIR)/$(BINARYNAME) cmd/api/main.go
 
 test:
 	mkdir -p $(BUILDDIR)
@@ -17,6 +19,9 @@ test:
 clean:
 	rm -rf $(BUILDDIR)
 
-local-run:
+local-build:
 	docker build . -t health-check:test
-	docker run -p 8080:8080 health-check:test
+
+local-test:
+	make local-build
+	docker-compose up

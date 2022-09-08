@@ -30,7 +30,7 @@ func TestNewConfig(t *testing.T) {
 				},
 				Redis: RedisConnectionConfig{
 					Host:     "redis://localhost",
-					Port:     6300,
+					Port:     6379,
 					PoolSize: 20,
 				},
 			},

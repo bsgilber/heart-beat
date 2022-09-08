@@ -6,5 +6,5 @@ logging:
 
 redis:
   host: "redis://localhost"
-  port: 6300
+  port: 6379
   poolSize: 20

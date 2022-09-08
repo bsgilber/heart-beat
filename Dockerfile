@@ -1,4 +1,5 @@
-FROM golang:1.17-buster
+# stage 1: build binary
+FROM golang:1.17-buster as build
 
 # Create and change to the app directory.
 WORKDIR /app
@@ -15,6 +16,17 @@ COPY . ./
 # build the binary
 RUN make build
 
+# stage 2: launch binary
+FROM alpine:3.14 AS run
+
+# Create and change to the app directory.
+WORKDIR /app
+
+# Copy binary from the build layer to this layer
+COPY --from=build /app/dist/main .
+
+ENV ENVIRONMENT="local"
+
 EXPOSE 8080
-CMD ["./dist/main"]
+CMD ["/app/main"]
 
