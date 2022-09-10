@@ -1,8 +1,8 @@
-package endpointdb
+package databases
 
 import "github.com/go-redis/redis/v8"
 
-func InitRedis() *redis.Client {
+func ConnectClient() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set

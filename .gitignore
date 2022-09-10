@@ -16,3 +16,4 @@
 
 # Terraform providers
 deploy/.terraform/**
+deploy/terraform.tfstate*

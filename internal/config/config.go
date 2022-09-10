@@ -15,9 +15,8 @@ type ServerConfig struct {
 }
 
 type RedisConnectionConfig struct {
-	Host     string `mapstructure:"host"`
-	Port     int    `mapstructure:"port"`
-	PoolSize int    `mapstructure:"poolSize"`
+	Host string `mapstructure:"host"`
+	Port int    `mapstructure:"port"`
 }
 
 type Config struct {

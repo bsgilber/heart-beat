@@ -29,9 +29,8 @@ func TestNewConfig(t *testing.T) {
 					Level: "debug",
 				},
 				Redis: RedisConnectionConfig{
-					Host:     "redis://localhost",
-					Port:     6379,
-					PoolSize: 20,
+					Host: "redis://localhost",
+					Port: 6379,
 				},
 			},
 		},
