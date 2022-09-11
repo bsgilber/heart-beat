@@ -24,9 +24,21 @@ func NewBaseHandler(endpointRepo models.EndpointRepository) *BaseHandler {
 }
 
 func (h *BaseHandler) Ping(c *gin.Context, name string) {
+	// TODO: pull this out into a helper func
+	is, err := h.endpointRepo.FindIfExists(name)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if is != true {
+		c.String(http.StatusBadRequest, fmt.Sprintf("the key [%s] does not exist.\n", name))
+		return
+	}
+
 	endpoint, err := h.endpointRepo.FindByName(name)
 	if err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("the key [%s] does not exist.\n", name))
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -55,9 +67,14 @@ func (h *BaseHandler) Register(c *gin.Context) {
 		return
 	}
 
-	ep, _ := h.endpointRepo.FindByName(endpoint.Name)
-	if ep != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "name must be unique"})
+	is, err := h.endpointRepo.FindIfExists(endpoint.Name)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if is == true {
+		c.JSON(http.StatusBadRequest, gin.H{"status": fmt.Sprintf("name must be unique; [%s] provided, exist check returned [%b].", endpoint.Name, is)})
 		return
 	}
 
@@ -82,13 +99,23 @@ func (h *BaseHandler) SinglePingPrep(c *gin.Context) {
 }
 
 func (h *BaseHandler) AllPingPrep(c *gin.Context) {
-	for endpoint := range h.Endpoints {
+	endpoints, err := h.endpointRepo.FindAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, endpoint := range endpoints {
 		h.Ping(c, endpoint.Name)
 	}
 }
 
 func (h *BaseHandler) ListRegistered(c *gin.Context) {
-	b, err := json.Marshal(cache)
+	endpoints, err := h.endpointRepo.FindAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	b, err := json.Marshal(endpoints)
 	if err != nil {
 		log.Fatal(err)
 	}

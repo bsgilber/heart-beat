@@ -6,9 +6,10 @@ type Endpoint struct {
 	URL  string `form:"url" json:"url" binding:"required" redis:"str2"`
 }
 
-type Endpoints []Endpoint
-
 type EndpointRepository interface {
 	FindByName(name string) (*Endpoint, error)
+	FindAll() ([]*Endpoint, error)
+	FindIfExists(name string) (bool, error)
+	FindAllKeys() ([]string, error)
 	Save(endpoint Endpoint) error
 }

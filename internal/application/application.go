@@ -6,6 +6,7 @@ import (
 
 	"github.com/bsgilber/heart-beat/internal/controllers"
 	"github.com/bsgilber/heart-beat/internal/databases"
+	"github.com/bsgilber/heart-beat/internal/repositories"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,7 +21,7 @@ func New() *App {
 	application := App{}
 
 	db := databases.ConnectClient()
-	endpointDb := databases.NewEndpointDb(db)
+	endpointDb := repositories.NewEndpointDb(db)
 	h := controllers.NewBaseHandler(endpointDb)
 
 	// Force log's color
