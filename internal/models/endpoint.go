@@ -8,8 +8,8 @@ type Endpoint struct {
 
 type EndpointRepository interface {
 	FindByName(name string) (*Endpoint, error)
-	FindAll() ([]*Endpoint, error)
+	FindAll() []*Endpoint
 	FindIfExists(name string) (bool, error)
-	FindAllKeys() ([]string, error)
+	FindAllKeys() []string
 	Save(endpoint Endpoint) error
 }

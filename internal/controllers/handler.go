@@ -74,7 +74,7 @@ func (h *BaseHandler) Register(c *gin.Context) {
 	}
 
 	if is == true {
-		c.JSON(http.StatusBadRequest, gin.H{"status": fmt.Sprintf("name must be unique; [%s] provided, exist check returned [%b].", endpoint.Name, is)})
+		c.JSON(http.StatusBadRequest, gin.H{"status": fmt.Sprintf("name must be unique; [%s] provided, exist check returned [%t].", endpoint.Name, is)})
 		return
 	}
 
@@ -99,10 +99,7 @@ func (h *BaseHandler) SinglePingPrep(c *gin.Context) {
 }
 
 func (h *BaseHandler) AllPingPrep(c *gin.Context) {
-	endpoints, err := h.endpointRepo.FindAll()
-	if err != nil {
-		log.Fatal(err)
-	}
+	endpoints := h.endpointRepo.FindAll()
 
 	for _, endpoint := range endpoints {
 		h.Ping(c, endpoint.Name)
@@ -110,10 +107,7 @@ func (h *BaseHandler) AllPingPrep(c *gin.Context) {
 }
 
 func (h *BaseHandler) ListRegistered(c *gin.Context) {
-	endpoints, err := h.endpointRepo.FindAll()
-	if err != nil {
-		log.Fatal(err)
-	}
+	endpoints := h.endpointRepo.FindAll()
 
 	b, err := json.Marshal(endpoints)
 	if err != nil {

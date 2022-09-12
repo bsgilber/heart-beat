@@ -41,40 +41,21 @@ func (db *EndpointDb) FindByName(name string) (*models.Endpoint, error) {
 	return &endpoint, nil
 }
 
-func (db *EndpointDb) FindAll() ([]*models.Endpoint, error) {
+func (db *EndpointDb) FindAll() []*models.Endpoint {
 	var endpoints []*models.Endpoint
 
-	members, err := db.FindAllKeys()
-	if err != nil {
-		return nil, err
-	}
+	members := db.FindAllKeys()
 
 	for _, member := range members {
 		val, _ := db.FindByName(member)
 		endpoints = append(endpoints, val)
 	}
 
-	return endpoints, nil
+	return endpoints
 }
 
-func (db *EndpointDb) FindAllKeys() ([]string, error) {
-	members := make([]string, 0)
-	cmds, err := db.client.Pipelined(db.ctx, func(rdb redis.Pipeliner) error {
-		// add the hash key to a set so we can get a list of all keys easily
-		rdb.SMembers(db.ctx, "endpoints")
-
-		return nil
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	for _, cmd := range cmds {
-		members = cmd.(*redis.StringSliceCmd).Val()
-	}
-
-	return members, nil
+func (db *EndpointDb) FindAllKeys() []string {
+	return db.client.SMembers(db.ctx, "endpoints").Val()
 }
 
 func (db *EndpointDb) Save(endpoint models.Endpoint) error {
