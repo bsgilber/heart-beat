@@ -13,7 +13,7 @@ import (
 var environment string
 
 type App struct {
-	srv *gin.Engine
+	Srv *gin.Engine
 }
 
 func New() *App {
@@ -39,13 +39,13 @@ func New() *App {
 	// Example for binding JSON ({"name": "unique_name", "url": "https://some.url.com"})
 	router.POST("/register", h.Register)
 
-	application.srv = router
+	application.Srv = router
 
 	return &application
 }
 
 func (a *App) Start() {
-	a.srv.Run(":8080")
+	a.Srv.Run(":8080")
 }
 
 func InitEnv() {

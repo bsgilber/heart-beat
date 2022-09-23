@@ -128,22 +128,10 @@ func TestBaseHandler_Register(t *testing.T) {
 		assert.Equal(t, "{\"error\":\"invalid request\"}", string(b))
 	})
 
-	//t.Run("test error path where name/key does not exist", func(t *testing.T) {
-	//	baseHandler := &BaseHandler{
-	//		endpointRepo: endpointDb,
-	//	}
+	t.Run("test register path where name/key already exists", func(t *testing.T) {
+	})
 
-	//	mock.ExpectSIsMember("endpoints", "test").SetVal(true)
-	//	w := httptest.NewRecorder()
-	//	c, _ := gin.CreateTestContext(w)
-
-	//	baseHandler.Register(c)
-
-	//	b, _ := ioutil.ReadAll(w.Body)
-	//	assert.Equal(t, "name must be unique; [test] provided, exist check returned [false].", string(b))
-	//})
-
-	//mock.ClearExpect()
+	mock.ClearExpect()
 }
 
 func TestBaseHandler_SinglePingPrep(t *testing.T) {
